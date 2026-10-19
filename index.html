@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TakeBook — Chọn sách hay. Mở góc nhìn mới.</title>
+<meta name="description" content="TakeBook — hiệu sách trực tuyến, khám phá sách theo chủ đề, tác giả và mức giá.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap&subset=vietnamese" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--cyan:#18B8C8;--cyan-dark:#087E89;--orange:#C97543;--orange-dark:#9E542D;--ivory:#F7F5EF;--paper:#FFFEFB;--teal:#19363B;--muted:#687875;--line:#E5E6E0;--soft:#EDF7F6;--shadow:0 12px 34px rgba(25,54,59,.07);--radius:14px}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;background:var(--ivory);color:var(--teal);font:400 15px/1.65 "Be Vietnam Pro",sans-serif}a{color:inherit;text-decoration:none}button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%;display:block}.wrap{width:min(1200px,calc(100% - 40px));margin:auto}.serif{font-family:"Playfair Display",Georgia,serif}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #7DDDE3;outline-offset:2px}
+.announcement{background:var(--teal);color:#fff;text-align:center;padding:8px 14px;font-size:12px;letter-spacing:.02em}.header{position:sticky;top:0;z-index:30;background:rgba(255,254,251,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.topbar{min-height:78px;display:flex;align-items:center;gap:28px}.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.11em;font-size:19px;white-space:nowrap}.brand-mark{width:36px;height:36px;border-radius:11px;background:var(--teal);display:grid;place-items:center;color:white}.brand-mark svg{width:25px}.mainnav{display:flex;align-items:center;gap:22px;font-size:13px;font-weight:600}.mainnav a:hover{color:var(--cyan-dark)}.searchbox{margin-left:auto;position:relative;flex:1;max-width:420px}.searchbox input{width:100%;height:44px;border:1px solid var(--line);border-radius:999px;background:#F8F8F4;padding:0 18px 0 44px;color:var(--teal)}.searchbox svg{position:absolute;left:15px;top:13px;width:18px;color:var(--muted)}.head-actions{display:flex;gap:8px}.pillbtn{border:1px solid var(--line);background:white;border-radius:999px;padding:10px 15px;color:var(--teal);font-size:13px;font-weight:600}.pillbtn:hover{border-color:var(--cyan)}.cart-count{display:inline-grid;place-items:center;background:var(--orange);color:white;border-radius:99px;min-width:20px;height:20px;font-size:11px;margin-left:5px;padding:0 5px}
+.hero{padding:50px 0 34px}.hero-panel{display:grid;grid-template-columns:1.05fr .95fr;min-height:350px;overflow:hidden;border-radius:22px;background:#EAF3F0;box-shadow:var(--shadow)}.hero-copy{padding:clamp(28px,5vw,62px);display:flex;flex-direction:column;align-items:flex-start;justify-content:center}.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--cyan-dark);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.13em}.eyebrow:before{content:"";width:22px;height:2px;background:var(--orange)}h1,h2,h3,p{margin-top:0}.hero h1{font-size:clamp(35px,4.5vw,57px);line-height:1.12;margin:17px 0}.hero p{color:#586C68;max-width:440px;margin-bottom:24px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:1px solid transparent;border-radius:999px;padding:12px 20px;min-height:44px;font-size:13px;font-weight:700;transition:transform .18s,background .18s}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--orange-dark);color:#fff}.btn-primary:hover{background:#834321}.btn-outline{border-color:#C8D7D2;background:transparent;color:var(--teal)}.hero-art{position:relative;min-height:300px;background:radial-gradient(circle at 65% 30%,#fff9e9 0,#D7EAE4 46%,#B7D6D0 100%);display:flex;align-items:center;justify-content:center;overflow:hidden}.orb{position:absolute;width:280px;height:280px;border-radius:50%;background:#F8E5D7;right:5%;top:4%;opacity:.75}.book-stack{position:relative;width:72%;height:250px;transform:rotate(-7deg)}.book{position:absolute;left:10%;width:75%;height:65px;border-radius:4px 10px 10px 4px;box-shadow:0 15px 18px #19363b20;border-left:10px solid #0002;display:flex;align-items:center;padding:0 24px;color:#fff;font:600 18px "Playfair Display",serif}.book:after{content:"";position:absolute;right:13px;top:12px;bottom:12px;width:1px;background:#ffffff50}.book.one{bottom:20px;background:#19363B;transform:rotate(4deg)}.book.two{bottom:82px;background:#18A8B5;left:2%;transform:rotate(-2deg)}.book.three{bottom:145px;background:#C97543;left:18%;transform:rotate(3deg)}.spark{position:absolute;color:#fff;font-size:28px}.spark.a{top:17%;left:18%}.spark.b{right:14%;bottom:16%;font-size:20px}
+.section{padding:35px 0 52px}.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:22px}.section-head h2{font-size:clamp(25px,3vw,34px);line-height:1.2;margin:0}.section-head p{margin:7px 0 0;color:var(--muted);font-size:13px}.textlink{color:var(--cyan-dark);font-weight:700;font-size:13px;white-space:nowrap}
+.category-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}.category{min-height:120px;text-align:left;border:1px solid var(--line);border-radius:14px;background:var(--paper);padding:17px 15px;display:flex;flex-direction:column;justify-content:space-between;gap:10px;transition:transform .2s,border-color .2s,box-shadow .2s;color:var(--teal)}.category:hover,.category.active{transform:translateY(-2px);border-color:var(--cyan);box-shadow:0 8px 20px #19363b0c}.cat-icon{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--soft);color:var(--cyan-dark);font-size:17px}.category:nth-child(3n+2) .cat-icon{background:#FAEEE6;color:var(--orange-dark)}.category strong{display:block;font-size:12px;line-height:1.45}.category small{color:var(--muted);font-size:11px}
+.catalog-shell{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:24px}.catalog-toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:20px}.tabs{display:flex;gap:6px;flex-wrap:wrap}.tab{border:1px solid transparent;background:transparent;border-radius:999px;padding:9px 14px;color:var(--muted);font-size:12px;font-weight:600}.tab.active,.tab:hover{background:var(--soft);color:var(--cyan-dark);border-color:#CDE9E7}.sortbox{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:12px}.sortbox select,.filter select,.filter input{border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--teal);padding:10px 12px;min-height:42px}.catalog-layout{display:grid;grid-template-columns:210px minmax(0,1fr);gap:25px}.filters{border-right:1px solid var(--line);padding-right:20px}.filter{margin-bottom:21px}.filter h3{font-size:12px;margin:0 0 10px}.filter select,.filter input{width:100%;font-size:12px}.filter label{display:flex;gap:8px;align-items:center;margin:9px 0;font-size:12px;color:#526560}.filter input[type=checkbox]{accent-color:var(--cyan-dark)}.clear-btn{background:none;border:0;color:var(--cyan-dark);font-size:12px;font-weight:700;padding:0}.results-top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:17px;color:var(--muted);font-size:12px}.book-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 16px}.book-card{min-width:0;position:relative}.cover-wrap{position:relative;border-radius:8px;overflow:hidden;background:#E8ECE7;aspect-ratio:2/2.85;box-shadow:0 5px 15px #19363b12}.cover-img{width:100%;height:100%;object-fit:cover;transition:transform .3s}.book-card:hover .cover-img{transform:scale(1.035)}.cover-placeholder{width:100%;height:100%;padding:14px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;background:linear-gradient(145deg,var(--cover,#19363B),#10272B)}.cover-placeholder .mini-brand{font-size:9px;letter-spacing:.15em;opacity:.85}.cover-placeholder .cover-title{font:600 clamp(13px,1.3vw,19px)/1.25 "Playfair Display",serif;overflow-wrap:anywhere}.cover-placeholder .cover-bottom{font-size:9px;opacity:.8}.badge-new{position:absolute;top:9px;left:9px;background:#fff;color:var(--orange-dark);font-size:9px;font-weight:700;padding:5px 8px;border-radius:99px}.quick-add{position:absolute;bottom:9px;right:9px;width:34px;height:34px;border:0;border-radius:50%;background:#fff;color:var(--teal);font-size:22px;box-shadow:0 4px 12px #0002}.quick-add:hover{background:var(--cyan);color:#fff}.book-name{font-size:12px;line-height:1.5;margin:11px 0 3px;font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:36px}.book-author{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.book-price{font-size:13px;font-weight:700;margin-top:8px}.old-price{font-size:10px;color:#9AA5A1;text-decoration:line-through;margin-left:5px;font-weight:400}.pagination{display:flex;justify-content:center;align-items:center;gap:7px;margin-top:28px;flex-wrap:wrap}.page-btn{min-width:36px;height:36px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--teal);font-size:12px}.page-btn.active,.page-btn:hover{background:var(--teal);color:white;border-color:var(--teal)}.page-btn:disabled{opacity:.35;cursor:not-allowed}.empty-state{padding:40px 15px;text-align:center;color:var(--muted);grid-column:1/-1;background:#F8F8F4;border-radius:12px}.empty-state strong{display:block;color:var(--teal);font-size:15px;margin-bottom:5px}
+.benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.benefit{display:flex;gap:14px;align-items:flex-start;padding:22px;border:1px solid var(--line);background:var(--paper);border-radius:14px}.benefit-icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--soft);font-size:18px;flex:none}.benefit h3{font-size:13px;margin:0 0 5px}.benefit p{font-size:12px;color:var(--muted);margin:0}
+footer{background:var(--teal);color:#DDE8E4;padding:45px 0 22px;margin-top:25px}.footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:30px}.footer-brand{font-size:18px;font-weight:700;letter-spacing:.1em;color:white}.footer-grid h3{font-size:12px;color:white;margin:0 0 12px}.footer-grid p,.footer-grid a{font-size:12px;color:#B8CAC5}.footer-grid a{display:block;margin:7px 0}.footer-grid a:hover{color:#fff}.copyright{border-top:1px solid #ffffff22;margin-top:28px;padding-top:18px;font-size:11px;color:#AFC1BC}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--teal);color:#fff;padding:12px 18px;border-radius:12px;z-index:80;font-size:12px;box-shadow:var(--shadow);transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}.loading{padding:36px;text-align:center;color:var(--muted);grid-column:1/-1}.spinner{display:inline-block;width:22px;height:22px;border:2px solid #CDE9E7;border-top-color:var(--cyan-dark);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:8px}@keyframes spin{to{transform:rotate(360deg)}}
+.modal-backdrop{position:fixed;inset:0;background:#10262ac7;z-index:60;display:none;align-items:center;justify-content:center;padding:20px}.modal-backdrop.open{display:flex}.modal{width:min(760px,100%);max-height:90vh;overflow:auto;background:var(--paper);border-radius:20px;padding:24px;position:relative}.modal-close{position:absolute;right:16px;top:14px;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:white;font-size:20px}.detail-layout{display:grid;grid-template-columns:minmax(170px,250px) 1fr;gap:28px;padding-top:18px}.detail-cover{width:100%;aspect-ratio:2/2.85;object-fit:cover;border-radius:8px;background:#E8ECE7}.detail-title{font:600 28px/1.2 "Playfair Display",serif;margin:8px 0 10px}.detail-price{font-size:22px;font-weight:700;color:var(--orange-dark);margin:16px 0}.detail-copy{color:var(--muted);font-size:13px;white-space:pre-line}.cart-panel{position:fixed;inset:0;z-index:65;display:none}.cart-panel.open{display:block}.cart-shade{position:absolute;inset:0;background:#10262a99}.cart-drawer{position:absolute;right:0;top:0;height:100%;width:min(440px,100%);background:var(--paper);padding:24px;display:flex;flex-direction:column;box-shadow:-15px 0 45px #0002}.drawer-head{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:15px}.drawer-head h2{margin:0;font:600 25px "Playfair Display",serif}.cart-items{overflow:auto;flex:1}.cart-row{display:grid;grid-template-columns:54px 1fr auto;gap:12px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.cart-thumb{width:54px;aspect-ratio:2/3;object-fit:cover;border-radius:4px;background:#E8ECE7}.cart-row strong{display:block;font-size:12px}.cart-row small{color:var(--muted);font-size:11px}.cart-row button{border:0;background:none;color:var(--orange-dark);font-size:11px}.cart-total{border-top:1px solid var(--line);padding-top:16px}.total-line{display:flex;justify-content:space-between;margin-bottom:14px;font-weight:700}.notice{padding:12px;border-radius:10px;background:#FAEEE6;color:#7D4A2B;font-size:11px;margin-top:10px}
+.mobile-bottom{display:none}
+@media(max-width:1000px){.mainnav{display:none}.category-grid{grid-template-columns:repeat(3,1fr)}.book-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.hero-panel{grid-template-columns:1fr 0.8fr}.footer-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){.wrap{width:min(100% - 28px,1200px)}.topbar{min-height:68px;gap:12px;flex-wrap:wrap;padding:10px 0}.brand{font-size:16px}.brand-mark{width:32px;height:32px}.searchbox{order:3;flex-basis:100%;max-width:none}.head-actions{margin-left:auto}.head-actions .pillbtn:first-child{display:none}.hero{padding:22px 0 20px}.hero-panel{grid-template-columns:1fr}.hero-copy{padding:30px 24px 20px}.hero h1{font-size:37px}.hero-art{min-height:215px}.book-stack{height:190px;transform:scale(.82) rotate(-7deg)}.section{padding:26px 0 34px}.category-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.category{min-height:100px;padding:13px}.catalog-shell{padding:14px;border-radius:14px}.catalog-layout{grid-template-columns:1fr;gap:12px}.filters{border-right:0;border-bottom:1px solid var(--line);padding:0 0 12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}.filter{margin:0}.filter:first-child{grid-column:1/-1}.filter h3{margin-bottom:5px}.filter label{margin:6px 0}.catalog-toolbar{align-items:flex-start}.tabs{gap:2px}.tab{padding:8px 10px}.sortbox{width:100%;justify-content:flex-end}.book-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 12px}.book-name{font-size:12px}.cover-placeholder{padding:11px}.benefits{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr 1fr;gap:22px}.footer-grid>div:first-child{grid-column:1/-1}.detail-layout{grid-template-columns:120px 1fr;gap:16px}.detail-title{font-size:22px}.modal{padding:18px}.mobile-bottom{display:flex;position:fixed;bottom:0;left:0;right:0;background:#FFFEFB;border-top:1px solid var(--line);z-index:35;padding:8px 14px calc(8px + env(safe-area-inset-bottom));justify-content:space-around}.mobile-bottom button{border:0;background:none;color:var(--teal);font-size:11px;display:grid;justify-items:center;gap:2px}.mobile-bottom span{font-size:19px}.toast{bottom:80px}}
+</style>
+</head>
+<body>
+<div class="announcement">Một cuốn sách hay có thể mở ra một góc nhìn mới · Chào mừng bạn đến với TakeBook</div>
+<header class="header">
+  <div class="wrap topbar">
+    <a class="brand" href="#" aria-label="TakeBook - Trang chủ"><span class="brand-mark"><svg viewBox="0 0 32 26" fill="none" aria-hidden="true"><path d="M16 5C12 2 6 2 2 3v19c5-1 10-1 14 2 4-3 9-3 14-2V3c-5-1-10-1-14 2Z" stroke="#18B8C8" stroke-width="2"/><path d="M16 5v19" stroke="#C97543" stroke-width="2"/></svg></span>TAKEBOOK</a>
+    <nav class="mainnav"><a href="#categories">Danh mục sách</a><a href="#catalog">Tất cả sách</a><a href="#benefits">Về TakeBook</a></nav>
+    <label class="searchbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="searchInput" type="search" placeholder="Tìm tên sách, tác giả, danh mục..." autocomplete="off" aria-label="Tìm sách"></label>
+    <div class="head-actions"><button class="pillbtn" id="allBooksBtn">Khám phá sách</button><button class="pillbtn" id="cartOpenBtn">Giỏ hàng <span class="cart-count" id="cartCount">0</span></button></div>
+  </div>
+</header>
+<main>
+  <section class="hero"><div class="wrap"><div class="hero-panel">
+    <div class="hero-copy"><span class="eyebrow">Premium Reading Club</span><h1 class="serif">Chọn sách hay.<br>Mở góc nhìn mới.</h1><p>Không chỉ là một cuốn sách. Đó có thể là một ý tưởng mới, một hành trình mới, hay một cách nhìn khác về cuộc sống.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-primary" href="#catalog">Khám phá tủ sách <span aria-hidden="true">↗</span></a><a class="btn btn-outline" href="#categories">Duyệt theo chủ đề</a></div></div>
+    <div class="hero-art" aria-label="Minh họa những cuốn sách nhiều màu sắc"><div class="orb"></div><span class="spark a">✦</span><span class="spark b">✧</span><div class="book-stack"><div class="book one">READ · REFLECT · GROW</div><div class="book two">Một góc nhìn mới</div><div class="book three">THE ART OF READING</div></div></div>
+  </div></div></section>
+  <section class="section" id="categories"><div class="wrap"><div class="section-head"><div><span class="eyebrow">Tìm theo sở thích</span><h2 class="serif" style="margin-top:9px">Khám phá danh mục sách</h2><p>Chọn chủ đề bạn quan tâm để tìm sách nhanh hơn.</p></div><a class="textlink" href="#catalog" id="allCategoriesLink">Xem tất cả sách ↗</a></div><div class="category-grid" id="categoryGrid"></div></div></section>
+  <section class="section" id="catalog"><div class="wrap"><div class="section-head"><div><span class="eyebrow">Tủ sách TakeBook</span><h2 class="serif" style="margin-top:9px" id="catalogHeading">Tất cả sách</h2><p>Tra cứu, lọc và sắp xếp đầu sách theo nhu cầu của bạn.</p></div></div>
+    <div class="catalog-shell"><div class="catalog-toolbar"><div class="tabs" id="quickTabs"><button class="tab active" data-tab="all">Tất cả</button><button class="tab" data-tab="new">Sách mới</button><button class="tab" data-tab="price">Giá tốt</button></div><div class="sortbox"><label for="sortSelect">Sắp xếp:</label><select id="sortSelect"><option value="default">Mặc định</option><option value="title">Tên sách A–Z</option><option value="priceAsc">Giá thấp đến cao</option><option value="priceDesc">Giá cao đến thấp</option></select></div></div>
+      <div class="catalog-layout"><aside class="filters">
+        <div class="filter"><h3>Tìm trong danh sách</h3><input id="filterSearch" type="search" placeholder="Tên sách hoặc tác giả"></div>
+        <div class="filter"><h3>Danh mục</h3><select id="categoryFilter"><option value="all">Tất cả danh mục</option></select></div>
+        <div class="filter"><h3>Khoảng giá</h3><select id="priceFilter"><option value="all">Mọi mức giá</option><option value="under100">Dưới 100.000₫</option><option value="100to200">100.000₫ – 200.000₫</option><option value="200to300">200.000₫ – 300.000₫</option><option value="over300">Trên 300.000₫</option></select></div>
+        <div class="filter"><h3>Tình trạng</h3><label><input type="checkbox" id="inStockFilter"> Chỉ xem sách còn hàng</label></div>
+        <div class="filter"><button class="clear-btn" id="clearFilters">↺ Xóa bộ lọc</button></div>
+      </aside><div class="results"><div class="results-top"><span id="resultCount" aria-live="polite">Đang tải sách…</span><span id="pageInfo"></span></div><div class="book-grid" id="bookGrid"><div class="loading"><span class="spinner"></span>Đang tải tủ sách TakeBook…</div></div><div class="pagination" id="pagination"></div></div></div>
+    </div>
+  </div></section>
+  <section class="section" id="benefits"><div class="wrap"><div class="section-head"><div><span class="eyebrow">Đọc theo cách của bạn</span><h2 class="serif" style="margin-top:9px">Một trải nghiệm mua sách dễ dàng</h2></div></div><div class="benefits"><div class="benefit"><div class="benefit-icon">⌕</div><div><h3>Tìm đúng cuốn sách</h3><p>Tìm theo tên, tác giả, danh mục và lọc theo mức giá.</p></div></div><div class="benefit"><div class="benefit-icon">▤</div><div><h3>Tủ sách có hệ thống</h3><p>Danh mục rõ ràng, dễ mở rộng khi TakeBook có thêm hàng nghìn đầu sách.</p></div></div><div class="benefit"><div class="benefit-icon">♡</div><div><h3>Chọn sách có chủ đích</h3><p>Khám phá những chủ đề phù hợp với sở thích và hành trình đọc của bạn.</p></div></div></div></div></section>
+</main>
+<footer><div class="wrap"><div class="footer-grid"><div><div class="footer-brand">TAKEBOOK</div><p>Chọn sách hay. Mở góc nhìn mới.<br>Một không gian dành cho những người yêu đọc.</p></div><div><h3>KHÁM PHÁ</h3><a href="#categories">Danh mục sách</a><a href="#catalog">Tất cả sách</a><a href="#catalog" id="footerNew">Sách mới</a></div><div><h3>HỖ TRỢ</h3><a href="#benefits">Hướng dẫn mua sách</a><a href="#benefits">Giao hàng & đổi trả</a><a href="mailto:hello@takebook.vn">Liên hệ TakeBook</a></div><div><h3>THÔNG TIN</h3><a href="#benefits">Về TakeBook</a><a href="#benefits">Chính sách bảo mật</a><a href="#benefits">Điều khoản sử dụng</a></div></div><div class="copyright">© <span id="year"></span> TakeBook · Premium Reading Club</div></div></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal-backdrop" id="detailModal" role="dialog" aria-modal="true" aria-label="Chi tiết sách"><div class="modal"><button class="modal-close" id="detailClose" aria-label="Đóng">×</button><div id="detailContent"></div></div></div>
+<div class="cart-panel" id="cartPanel"><div class="cart-shade" id="cartShade"></div><aside class="cart-drawer"><div class="drawer-head"><h2>Giỏ hàng</h2><button class="modal-close" id="cartClose" aria-label="Đóng" style="position:static">×</button></div><div class="cart-items" id="cartItems"></div><div class="cart-total" id="cartTotal"></div></aside></div>
+<nav class="mobile-bottom"><button onclick="window.scrollTo({top:0,behavior:'smooth'})"><span>⌂</span>Trang chủ</button><button onclick="document.getElementById('categories').scrollIntoView({behavior:'smooth'})"><span>▦</span>Danh mục</button><button onclick="document.getElementById('searchInput').focus();window.scrollTo({top:0,behavior:'smooth'})"><span>⌕</span>Tìm sách</button><button id="mobileCartBtn"><span>🛒</span>Giỏ hàng</button></nav>
+<script>
+/* CẤU HÌNH TAKEBOOK
+   Giữ Project URL ở dạng https://TEN-PROJECT.supabase.co
+   Không dùng service_role key trong file HTML công khai.
+*/
+const SUPABASE_URL = 'https://flanfijggdhgutmkuiji.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_iPEHl8Ll2Ap5MpQEQFOHBg__vaeFuVb';
+const TABLE_NAME = 'BookProduct';
+const PAGE_SIZE = 12;
+const FALLBACK_CATEGORIES = [
+  {name:'Văn học & tiểu thuyết',icon:'✒',keys:['văn học','tiểu thuyết','truyện','fiction']},
+  {name:'Kinh doanh & tài chính',icon:'↗',keys:['kinh doanh','tài chính','đầu tư','business']},
+  {name:'Phát triển bản thân',icon:'✦',keys:['phát triển bản thân','self-help','phát triển cá nhân']},
+  {name:'Tâm lý & kỹ năng sống',icon:'◉',keys:['tâm lý','kỹ năng sống','tâm lý học']},
+  {name:'Lịch sử & văn hóa',icon:'⌂',keys:['lịch sử','văn hóa','history']},
+  {name:'Thiếu nhi & gia đình',icon:'☼',keys:['thiếu nhi','trẻ em','gia đình']},
+  {name:'Giáo dục & học ngoại ngữ',icon:'文',keys:['giáo dục','ngoại ngữ','tiếng anh','học tập']},
+  {name:'Khoa học & công nghệ',icon:'⚛',keys:['khoa học','công nghệ','science']},
+  {name:'Sức khỏe & đời sống',icon:'♡',keys:['sức khỏe','đời sống','dinh dưỡng']},
+  {name:'Triết học & tư duy',icon:'◇',keys:['triết học','tư duy','logic']},
+  {name:'Nghệ thuật & sáng tạo',icon:'✿',keys:['nghệ thuật','sáng tạo','thiết kế']},
+  {name:'Tôn giáo & tâm linh',icon:'☯',keys:['tôn giáo','tâm linh','phật giáo']}
+];
+let db=null, BOOKS=[], filtered=[], currentPage=1, activeTab='all', selectedCategory='all';
+let cart={};
+const $=id=>document.getElementById(id);
+const money=n=>Number(n||0).toLocaleString('vi-VN')+'₫';
+const first=(obj,keys,fallback='')=>{for(const k of keys){if(obj&&obj[k]!==undefined&&obj[k]!==null&&obj[k]!=='')return obj[k]}return fallback};
+const titleOf=b=>String(first(b,['title','name','book_title','tile'],'Chưa có tên sách'));
+const authorOf=b=>String(first(b,['author','authors','tac_gia','writer'],'Đang cập nhật tác giả'));
+const priceOf=b=>Number(first(b,['price','gia','sale_price','selling_price'],0))||0;
+const imageOf=b=>String(first(b,['image_url','cover_image','image','imageUrl','thumbnail','cover_url'],''));
+const categoryOf=b=>String(first(b,['category','category_name','categoryName','danh_muc','genre','type'],'Chưa phân loại'));
+const stockOf=b=>{const x=first(b,['stock','quantity','inventory','so_luong'],null);return x===null?null:Number(x)};
+const descOf=b=>String(first(b,['description','summary','mo_ta','content'],'Thông tin giới thiệu sách đang được cập nhật.'));
+const fmtError=e=>String(e?.message||e||'Lỗi không xác định');
+function toast(msg){$('toast').textContent=msg;$('toast').classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').classList.remove('show'),2600)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function norm(s){return String(s||'').toLocaleLowerCase('vi').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d')}
+function catNames(){const names=[...new Set(BOOKS.map(categoryOf).filter(Boolean))];return names.sort((a,b)=>a.localeCompare(b,'vi'))}
+function categoryIcon(name){const n=norm(name);const c=FALLBACK_CATEGORIES.find(x=>[x.name,...x.keys].some(k=>n.includes(norm(k))||norm(k).includes(n)));return c?.icon||'▤'}
+function renderCategories(){
+ const names=catNames();
+ const display=names.filter(n=>n!=='Chưa phân loại').slice(0,11);
+ const cards=display.length?display:FALLBACK_CATEGORIES.slice(0,12).map(x=>x.name);
+ $('categoryGrid').innerHTML=cards.map((name,i)=>`<button class="category ${selectedCategory===name?'active':''}" data-category="${esc(name)}"><span class="cat-icon">${categoryIcon(name)}</span><span><strong>${esc(name)}</strong><small>${names.includes(name)?BOOKS.filter(b=>categoryOf(b)===name).length+' đầu sách':'Khám phá chủ đề'}</small></span></button>`).join('');
+ $('categoryFilter').innerHTML='<option value="all">Tất cả danh mục</option>'+names.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join('');
+}
+function coverMarkup(b,small=false){
+ const image=imageOf(b);
+ if(image)return `<img class="${small?'detail-cover':'cover-img'}" src="${esc(image)}" alt="Bìa ${esc(titleOf(b))}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="--cover:${esc(first(b,['color'],'#19363B'))};display:none"><span class="mini-brand">TAKEBOOK · READING CLUB</span><span class="cover-title">${esc(titleOf(b))}</span><span class="cover-bottom">${esc(authorOf(b))}</span></div>`;
+ return `<div class="${small?'detail-cover':'cover-placeholder'} cover-placeholder" style="--cover:${esc(first(b,['color'],'#19363B'))}"><span class="mini-brand">TAKEBOOK · READING CLUB</span><span class="cover-title">${esc(titleOf(b))}</span><span class="cover-bottom">${esc(authorOf(b))}</span></div>`;
+}
+function cardMarkup(b){
+ const id=String(first(b,['id','book_id','sku'],titleOf(b)));
+ const ix=BOOKS.indexOf(b);
+ const stock=stockOf(b);
+ return `<article class="book-card"><button class="cover-wrap" style="display:block;width:100%;border:0;padding:0;text-align:left" data-detail="${ix}" aria-label="Xem ${esc(titleOf(b))}">${coverMarkup(b)}${b.is_new||b.isNew?'<span class="badge-new">SÁCH MỚI</span>':''}</button><button class="quick-add" data-add="${ix}" aria-label="Thêm ${esc(titleOf(b))} vào giỏ">+</button><button class="book-name" data-detail="${ix}" style="border:0;background:none;padding:0;text-align:left;color:inherit;width:100%">${esc(titleOf(b))}</button><div class="book-author">${esc(authorOf(b))}</div><div class="book-price">${money(priceOf(b))}</div></article>`;
+}
+function applyFilters(){
+ const q=norm($('searchInput').value||$('filterSearch').value);
+ const fq=norm($('filterSearch').value);
+ const search=norm($('searchInput').value);
+ const query=search||fq;
+ const cat=$('categoryFilter').value;
+ const price=$('priceFilter').value;
+ const stock=$('inStockFilter').checked;
+ filtered=BOOKS.filter(b=>{
+   const hay=norm([titleOf(b),authorOf(b),categoryOf(b),descOf(b)].join(' '));
+   if(query&&!hay.includes(query))return false;
+   if(selectedCategory!=='all'&&categoryOf(b)!==selectedCategory)return false;
+   if(cat!=='all'&&categoryOf(b)!==cat)return false;
+   const p=priceOf(b);
+   if(price==='under100'&&!(p<100000))return false;
+   if(price==='100to200'&&!(p>=100000&&p<=200000))return false;
+   if(price==='200to300'&&!(p>200000&&p<=300000))return false;
+   if(price==='over300'&&!(p>300000))return false;
+   if(stock&&stockOf(b)!==null&&stockOf(b)<=0)return false;
+   if(stock&&stockOf(b)===null&&b.in_stock===false)return false;
+   if(activeTab==='new'&&!(b.is_new||b.isNew||b.new_arrival||b.is_new_arrival))return false;
+   if(activeTab==='price'&&!(p>0&&p<=150000))return false;
+   return true;
+ });
+ const sort=$('sortSelect').value;
+ if(sort==='title')filtered.sort((a,b)=>titleOf(a).localeCompare(titleOf(b),'vi'));
+ if(sort==='priceAsc')filtered.sort((a,b)=>priceOf(a)-priceOf(b));
+ if(sort==='priceDesc')filtered.sort((a,b)=>priceOf(b)-priceOf(a));
+ currentPage=Math.min(currentPage,Math.max(1,Math.ceil(filtered.length/PAGE_SIZE)));
+ renderProducts();
+}
+function renderProducts(){
+ const total=filtered.length,pages=Math.max(1,Math.ceil(total/PAGE_SIZE));
+ const start=(currentPage-1)*PAGE_SIZE, rows=filtered.slice(start,start+PAGE_SIZE);
+ $('resultCount').textContent=`Hiển thị ${total?start+1:0}–${Math.min(start+PAGE_SIZE,total)} trong ${total.toLocaleString('vi-VN')} đầu sách`;
+ $('pageInfo').textContent=total?`Trang ${currentPage}/${pages}`:'';
+ $('catalogHeading').textContent=selectedCategory==='all'?'Tất cả sách':selectedCategory;
+ $('bookGrid').innerHTML=rows.length?rows.map(cardMarkup).join(''):`<div class="empty-state"><strong>Chưa tìm thấy cuốn sách phù hợp</strong>Hãy thử từ khóa khác hoặc xóa bớt bộ lọc.<br><button class="btn btn-outline" style="margin-top:14px" id="emptyClear">Xóa bộ lọc</button></div>`;
+ $('pagination').innerHTML=total>PAGE_SIZE?`<button class="page-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''} aria-label="Trang trước">‹</button>${Array.from({length:pages},(_,i)=>i+1).filter(n=>n===1||n===pages||Math.abs(n-currentPage)<=1).map((n,i,arr)=>`${i&&n-arr[i-1]>1?'<span>…</span>':''}<button class="page-btn ${n===currentPage?'active':''}" data-page="${n}">${n}</button>`).join('')}<button class="page-btn" data-page="${currentPage+1}" ${currentPage===pages?'disabled':''} aria-label="Trang sau">›</button>`:'';
+ document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===activeTab));
+}
+function syncSearch(value,source){if(source!=='top')$('searchInput').value=value;if(source!=='side')$('filterSearch').value=value;currentPage=1;applyFilters()}
+function clearFilters(){selectedCategory='all';activeTab='all';$('searchInput').value='';$('filterSearch').value='';$('categoryFilter').value='all';$('priceFilter').value='all';$('inStockFilter').checked=false;$('sortSelect').value='default';currentPage=1;renderCategories();applyFilters()}
+function detail(ix){const b=BOOKS[ix];if(!b)return;const stock=stockOf(b);$('detailContent').innerHTML=`<div class="detail-layout"><div>${coverMarkup(b,true)}</div><div><span class="eyebrow">${esc(categoryOf(b))}</span><h2 class="detail-title">${esc(titleOf(b))}</h2><div class="book-author">${esc(authorOf(b))}</div><div class="detail-price">${money(priceOf(b))}</div><p class="detail-copy">${esc(descOf(b))}</p><p class="detail-copy">Tình trạng: ${stock===null?(b.in_stock===false?'Tạm hết hàng':'Đang cập nhật'):(stock>0?'Còn '+stock+' cuốn':'Tạm hết hàng')}</p><button class="btn btn-primary" data-add="${ix}" ${stock!==null&&stock<=0?'disabled':''}>＋ Thêm vào giỏ</button></div></div>`;$('detailModal').classList.add('open')}
+function cartCount(){return Object.values(cart).reduce((n,x)=>n+x,0)}
+function updateCartBadge(){$('cartCount').textContent=cartCount()}
+function addToCart(ix){const b=BOOKS[ix];if(!b)return;const stock=stockOf(b);if(stock!==null&&stock<=0){toast('Sách hiện đang hết hàng.');return}const key=String(first(b,['id','book_id','sku'],titleOf(b)));cart[key]=(cart[key]||0)+1;cart[key+'_ix']=ix;updateCartBadge();toast('Đã thêm sách vào giỏ hàng.')}
+function openCart(){$('cartPanel').classList.add('open');renderCart()}
+function renderCart(){
+ const entries=Object.keys(cart).filter(k=>!k.endsWith('_ix'));
+ if(!entries.length){$('cartItems').innerHTML='<div class="empty-state" style="margin-top:20px"><strong>Giỏ hàng đang trống</strong>Hãy khám phá và chọn một cuốn sách nhé.</div>';$('cartTotal').innerHTML='<a href="#catalog" class="btn btn-primary" id="continueShopping" style="width:100%">Khám phá sách</a>';return}
+ let total=0;
+ $('cartItems').innerHTML=entries.map(key=>{const ix=cart[key+'_ix'],b=BOOKS[ix];if(!b)return '';const qty=cart[key],line=qty*priceOf(b);total+=line;return `<div class="cart-row"><div style="width:54px;aspect-ratio:2/3;overflow:hidden;border-radius:4px">${coverMarkup(b)}</div><div><strong>${esc(titleOf(b))}</strong><small>${money(priceOf(b))} · SL ${qty}</small><div><button data-remove="${esc(key)}">Xóa khỏi giỏ</button></div></div><b style="font-size:12px">${money(line)}</b></div>`}).join('');
+ $('cartTotal').innerHTML=`<div class="total-line"><span>Tạm tính</span><span>${money(total)}</span></div><button class="btn btn-primary" id="checkoutInfo" style="width:100%">Tiếp tục mua hàng</button><div class="notice">Giỏ hàng hiện chỉ lưu trong trình duyệt. Chức năng tạo đơn hàng và thanh toán trực tuyến chưa được kết nối.</div>`;
+}
+async function loadBooks(){
+ if(!window.supabase){showLoadError('Không tải được thư viện kết nối Supabase. Hãy kiểm tra kết nối internet.');return}
+ try{
+  db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+  let all=[],from=0,batch=1000;
+  while(true){
+   const {data,error}=await db.from(TABLE_NAME).select('*').range(from,from+batch-1);
+   if(error)throw error;
+   all=all.concat(data||[]);
+   if(!data||data.length<batch)break;
+   from+=batch;
+   if(from>50000)break;
+  }
+  BOOKS=all;
+  if(!BOOKS.length){showEmptyDatabase();return}
+  renderCategories();
+  applyFilters();
+ }catch(e){console.error('TakeBook Supabase error:',e);showLoadError(fmtError(e))}
+}
+function showLoadError(msg){
+ $('bookGrid').innerHTML=`<div class="empty-state"><strong>Chưa kết nối được dữ liệu sách</strong><p style="margin:8px 0 12px">Hệ thống chưa đọc được bảng <b>${esc(TABLE_NAME)}</b> trong Supabase.</p><small style="overflow-wrap:anywhere">${esc(msg)}</small><p style="margin:12px 0 0;font-size:11px">Bạn cần kiểm tra Project URL, publishable key, tên bảng và quyền đọc dữ liệu. Không chia sẻ service_role key.</p><button class="btn btn-outline" id="retryLoad" style="margin-top:12px">Thử tải lại</button></div>`;
+ $('resultCount').textContent='Chưa tải được dữ liệu';
+}
+function showEmptyDatabase(){
+ renderCategories();filtered=[];renderProducts();
+ $('bookGrid').innerHTML='<div class="empty-state"><strong>Chưa có đầu sách để hiển thị</strong>Bảng dữ liệu đã được đọc nhưng chưa có bản ghi. Hãy thêm sách trong Supabase Table Editor.</div>';
+ $('resultCount').textContent='0 đầu sách';
+}
+document.addEventListener('click',e=>{
+ const d=e.target.closest('[data-detail]');if(d){detail(Number(d.dataset.detail));return}
+ const a=e.target.closest('[data-add]');if(a){addToCart(Number(a.dataset.add));return}
+ const pg=e.target.closest('[data-page]');if(pg&&!pg.disabled){currentPage=Number(pg.dataset.page);renderProducts();$('catalog').scrollIntoView({behavior:'smooth'});return}
+ const cat=e.target.closest('[data-category]');if(cat){selectedCategory=cat.dataset.category;$('categoryFilter').value=catNames().includes(selectedCategory)?selectedCategory:'all';currentPage=1;renderCategories();applyFilters();$('catalog').scrollIntoView({behavior:'smooth'});return}
+ const rm=e.target.closest('[data-remove]');if(rm){delete cart[rm.dataset.remove];delete cart[rm.dataset.remove+'_ix'];updateCartBadge();renderCart();return}
+ if(e.target.id==='emptyClear')clearFilters();
+ if(e.target.id==='retryLoad')loadBooks();
+ if(e.target.id==='checkoutInfo'||e.target.id==='continueShopping'){$('cartPanel').classList.remove('open');$('catalog').scrollIntoView({behavior:'smooth'})}
+});
+$('searchInput').addEventListener('input',()=>syncSearch($('searchInput').value,'top'));
+$('filterSearch').addEventListener('input',()=>syncSearch($('filterSearch').value,'side'));
+['categoryFilter','priceFilter','inStockFilter','sortSelect'].forEach(id=>$(id).addEventListener('change',()=>{currentPage=1;selectedCategory=$('categoryFilter').value==='all'?'all':$('categoryFilter').value;renderCategories();applyFilters()}));
+$('clearFilters').addEventListener('click',clearFilters);
+$('quickTabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;activeTab=b.dataset.tab;currentPage=1;applyFilters()});
+$('allBooksBtn').addEventListener('click',()=>{$('catalog').scrollIntoView({behavior:'smooth'});clearFilters()});
+$('allCategoriesLink').addEventListener('click',()=>{selectedCategory='all';renderCategories();applyFilters()});
+$('footerNew').addEventListener('click',()=>{activeTab='new';currentPage=1;applyFilters()});
+$('cartOpenBtn').addEventListener('click',openCart);$('mobileCartBtn').addEventListener('click',openCart);
+$('cartClose').addEventListener('click',()=>$('cartPanel').classList.remove('open'));$('cartShade').addEventListener('click',()=>$('cartPanel').classList.remove('open'));
+$('detailClose').addEventListener('click',()=>$('detailModal').classList.remove('open'));
+$('detailModal').addEventListener('click',e=>{if(e.target===$('detailModal'))$('detailModal').classList.remove('open')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('detailModal').classList.remove('open');$('cartPanel').classList.remove('open')}});
+$('year').textContent=new Date().getFullYear();
+loadBooks();
+</script>
+</body>
+</html>
